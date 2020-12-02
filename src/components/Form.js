@@ -1,11 +1,11 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { GlobalContext } from "../context/GlobalState";
-export default function Form() {
+export default function Form({detailval}) {
     const [name,setName]=useState("");
     const [mail,setMail]=useState("");
-
-    const {addData} = useContext(GlobalContext)
+    const [currentData, setCurrentData] = useState(null);
+    const {addData,updateData} = useContext(GlobalContext)
     const { register, handleSubmit,errors } = useForm();
     const OnSubmit = () => { 
         const newData={
@@ -13,8 +13,25 @@ export default function Form() {
             name:name,
             email:mail
         }
-        addData(newData)
+        if (currentData == null) {
+            addData(newData)
+            setName("");
+            setMail("")
+         } else {
+            updateData(newData)
+         }
+         setCurrentData(null);
+        
     }
+    useEffect(() => {
+        if (currentData != null) {
+           setName(currentData.name);
+           setMail(currentData.email)
+        } else {
+           setName("");
+           setMail("");
+        }
+     }, [currentData]);
     return (
         <div className="col-6 form">
              <div className="form-field">
