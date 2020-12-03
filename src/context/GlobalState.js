@@ -4,7 +4,8 @@ import AppReducer from './AppReducer';
 //initial state
 
 const initialState={
-    details:[]
+    details:[],
+    selected:[]
 }
 
 // create context
@@ -36,16 +37,22 @@ export const GlobalProvider = ({children})=>{
                  type:'UPDATE_DATA',
                  payload:detail
               })
+        }
         
-        
-        
+        function addselectedData(selecteddetail){
+            dispatch({
+               type:'ADDSELECTED_DATA',
+               payload:selecteddetail
+            })
     }
      return(
          <GlobalContext.Provider value={{
              details:state.details,
+             selected:state.selected,
              deletedata,
              addData,
-             updateData
+             updateData,
+             addselectedData
          }}>
              {children}
          </GlobalContext.Provider>

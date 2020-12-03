@@ -1,37 +1,45 @@
 import React,{useState,useContext,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { GlobalContext } from "../context/GlobalState";
-export default function Form({detailval}) {
+export default function Form() {
     const [name,setName]=useState("");
     const [mail,setMail]=useState("");
     const [currentData, setCurrentData] = useState(null);
-    const {addData,updateData} = useContext(GlobalContext)
+    const {addData,updateData,selected,details} = useContext(GlobalContext)
     const { register, handleSubmit,errors } = useForm();
+
     const OnSubmit = () => { 
-        const newData={
+        const Data={
             id:Math.floor(Math.random()* 100000000),
             name:name,
             email:mail
         }
-        if (currentData == null) {
-            addData(newData)
+         if (currentData == null) {
+            addData(Data);
             setName("");
-            setMail("")
-         } else {
-            updateData(newData)
+            setMail("");
+         }   
+         else  {
+             currentData.map(data=>{
+                 const newData={
+                     id:data.id,
+                     name:name,
+                     email:mail
+                 }
+                 updateData(newData);
+             })
          }
-         setCurrentData(null);
-        
     }
-    useEffect(() => {
-        if (currentData != null) {
-           setName(currentData.name);
-           setMail(currentData.email)
-        } else {
-           setName("");
-           setMail("");
-        }
-     }, [currentData]);
+    
+   useEffect(()=>{
+       if(selected.length != 0){
+          selected.map(data=>{
+             setName(data.name);
+             setMail(data.email); 
+          })
+          setCurrentData(selected);
+       }
+    },[selected])
     return (
         <div className="col-6 form">
              <div className="form-field">
@@ -61,7 +69,7 @@ export default function Form({detailval}) {
                           </div>
                       </div>
                       <div className="form-row justify-content-center align-items-center pt-4">
-                           <button type="submit" className="btn btn-primary btn-sm">Submit</button>
+                           <button type="submit" id="update" className="btn btn-primary btn-sm">Submit</button>
                       </div>
                   </form>
                 </div>  

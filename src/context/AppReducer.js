@@ -10,6 +10,11 @@ export default (state,action)=>{
                 ...state,
                 details:[action.payload,...state.details]
             }  
+        case 'ADDSELECTED_DATA':
+                return{
+                    ...state,
+                    selected:[action.payload]
+                } 
         case 'UPDATE_DATA':
             return{
                 ...state,
